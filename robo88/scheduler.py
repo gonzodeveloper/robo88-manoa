@@ -74,7 +74,7 @@ class SchedulerRequests(DispatchBot):
         print(msg_dict)
 
         # Read dataframe from JSON
-        return pd.DataFrame.from_dict(msg_dict, orient="records")
+        return pd.DataFrame.from_dict(msg_dict, orient="index")
 
     def remove_request(self, user, obj_name=None, request_idx=None):
         """
