@@ -35,6 +35,7 @@ add_req.add_argument("priority", type=int,
                      help="ranked priority of observation 1-5 for survey priorities; 9 for immediate ToO")
 add_req.add_argument("--filter", type=str, choices=["Open", "g", "r", "i", "z", "y"],
                      help="STACam bandpass filter")
+add_req.add_argument("--exp_time", type=int, help="exposure time")
 add_req.add_argument("--exp_num", type=int, help="number of exposures per observation")
 add_req.add_argument("--comments", type=str, help="general comments")
 # load_reqs subparser
@@ -79,6 +80,7 @@ elif args["command"] == "add_req":
                                    user=args["user"],
                                    priority=args["priority"],
                                    filter_name=args["filter"],
+                                   exp_time=args['exp_time'],
                                    exp_num=args["exp_num"],
                                    comments=args["comments"])
     print(f"SUBMITTED, REQUEST INDEX: {req_idx}")
