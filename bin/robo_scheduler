@@ -59,7 +59,7 @@ get_reqs.add_argument("--output", type=str, help="if set, then write dataframe t
 args = vars(main_parser.parse_args())
 
 # Read in observer config file
-config = "/data/projects/UH88/code/aux/"
+config = "/data/projects/UH88/robo88-manoa/aux/"
 
 schedule = SchedulerRequests(reporting_mode=LOGFILE,
                              config_dir=config,
