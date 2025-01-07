@@ -1,4 +1,3 @@
-from .misc import parse_network_str
 from logstash_async.handler import AsynchronousLogstashHandler
 from confluent_kafka import Producer
 from threading import Thread
@@ -29,7 +28,8 @@ FULL = 31
 # Report levels
 BUFFER_SIZE = 2048
 
-## Messaging protocol
+
+# Messaging protocol
 def send_msg(sock, msg):
     # Prefix each message with a 4-byte length (network byte order)
     msg = struct.pack('>I', len(msg)) + msg
@@ -56,6 +56,16 @@ def recvall(sock, n):
         data.extend(packet)
     return data
 
+
+def parse_network_str(netstr):
+    """
+    Parses command strings exchanged over the network.
+    :param netstr: command string from socket; str
+    :return: tuple with command/status and following message; (str, str)
+    """
+    command_status = netstr.split()[0].strip()
+    msg = " ".join(netstr.split()[1:])
+    return command_status, msg
 
 class Robot:
     """
