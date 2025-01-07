@@ -70,10 +70,11 @@ class SchedulerRequests(DispatchBot):
         if status == "ERROR":
             self.log({"runtime_error": msg}, level="ERROR")
             raise RuntimeError(msg)
-        print(msg)
+        msg_dict = json.loads(msg)
+        print(msg_dict)
 
         # Read dataframe from JSON
-        return pd.read_json(msg)
+        return pd.DataFrame(msg_dict)
 
     def remove_request(self, user, obj_name=None, request_idx=None):
         """
