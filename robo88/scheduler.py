@@ -70,9 +70,10 @@ class SchedulerRequests(DispatchBot):
         if status == "ERROR":
             self.log({"runtime_error": msg}, level="ERROR")
             raise RuntimeError(msg)
-        msg_dict = json.loads(msg)
-        print(msg_dict)
+        msg = msg.replace('\"', '"')
 
+        msg_dict = json.loads(msg)
+        print(type)
         # Read dataframe from JSON
         return pd.json_normalize(msg_dict)
 
