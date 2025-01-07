@@ -20,7 +20,6 @@ class SchedulerRequests(DispatchBot):
         # Send request to change night (don't send nulls in JSON)
         args = locals()
         request = {k: v for k, v in args.items() if v is not None and k != "self"}
-        #print(request)
         status, msg = self.send_request(f"get_obs {json.dumps(request)}")
 
         if status == "ERROR":
@@ -49,7 +48,7 @@ class SchedulerRequests(DispatchBot):
         """
         # Send request to change night (don't send nulls in JSON)
         args = locals()
-        request = {k: v for k, v in args.items() if v is not None}
+        request = {k: v for k, v in args.items() if v is not None and k != "self"}
         status, msg = self.send_request(f"add_req {json.dumps(request)}")
 
         if status == "ERROR":
@@ -71,7 +70,6 @@ class SchedulerRequests(DispatchBot):
         if status == "ERROR":
             self.log({"runtime_error": msg}, level="ERROR")
             raise RuntimeError(msg)
-        #msg = msg.replace('\"', '"')
 
         msg_dict = json.loads(json.loads(msg))
         print(type(msg_dict))
@@ -88,7 +86,7 @@ class SchedulerRequests(DispatchBot):
         """
         # Send request to change night (don't send nulls in JSON)
         args = locals()
-        request = {k: v for k, v in args.items() if v is not None}
+        request = {k: v for k, v in args.items() if v is not None and k != "self"}
         status, msg = self.send_request(f"del_req {json.dumps(request)}")
 
         if status == "ERROR":
