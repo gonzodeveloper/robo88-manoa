@@ -72,7 +72,7 @@ class SchedulerRequests(DispatchBot):
             raise RuntimeError(msg)
 
         # Read dataframe from JSON
-        return pd.DataFrame(json.loads(msg))
+        return pd.read_json(msg)
 
     def remove_request(self, user, obj_name=None, request_idx=None):
         """
