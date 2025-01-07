@@ -73,7 +73,7 @@ class SchedulerRequests(DispatchBot):
         msg = msg.replace('\"', '"')
 
         msg_dict = json.loads(msg)
-        print(type)
+        print(type(msg_dict))
         # Read dataframe from JSON
         return pd.json_normalize(msg_dict)
 
