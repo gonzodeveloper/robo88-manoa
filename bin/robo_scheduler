@@ -96,7 +96,7 @@ elif args["command"] == "del_req":
     n_rows_del = schedule.remove_request(args["user"], args["obj_name"], args["request_idx"])
     print(f"SUCCESSFULLY DELETED {n_rows_del} REQUESTS")
 elif args["command"] == "get_reqs":
-    req_df = schedule.get_requests(args.user)
+    req_df = schedule.get_requests(args["user"])
     if args["output"]:
         req_df.to_csv(args["output"], index=False)
     else:
