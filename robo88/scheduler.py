@@ -20,6 +20,7 @@ class SchedulerRequests(DispatchBot):
         # Send request to change night (don't send nulls in JSON)
         args = locals()
         request = {k: v for k, v in args.items() if v is not None}
+        print(args)
         print(request)
         status, msg = self.send_request(f"get_obs {json.dumps(request)}")
 
