@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+#######################################################################################################################
+# ROBO SCHEDULER
+# Submit, remove, and inspect scheduler requests UH88 Robotic Operations
+#
+# Author: Kyle Hart
+# Date 30 Nov 2024
+#######################################################################################################################
+from robo88.scheduler import SchedulerRequests
+from robo88.sys_mods import LOGFILE
+import pandas as pd
+import argparse
+
+
+# Parse arguments
+main_parser = argparse.ArgumentParser("robo_scheduler", description="UH88 Robotic Schedule Interface.")
+main_parser.add_argument('--debug', action='store_true', default=False,
+                         help='set to enable printing/logging in debug mode')
+command_subparsers = main_parser.add_subparsers(title="command", dest="command")
+
+# get_obs subparser
+get_obs = command_subparsers.add_parser("get_obs", help="get files robo observations",
+                                        description="Retrieve file names for user's recent observations.")
+get_obs.add_argument("user", type=str, help="name of the user who submitted obs requests")
+get_obs.add_argument("--n_nights", type=int, help="how many nights back to search")
+get_obs.add_argument("--obj_name", type=str, help="name of object to search")
+# add_req subparser
+add_req = command_subparsers.add_parser("add_req", help="submit single observation request",
+                                        description="Submit single observation request to robotic observer.")
+add_req.add_argument("obj_name", type=str, help="standard object name")
+add_req.add_argument("ra_hms", type=str, help="right ascension; HH:MM:SS.S")
+add_req.add_argument("dec_dms", type=str, help="declination; DD:MM:SS.S")
+add_req.add_argument("user", type=str, help="name of requesting user (no spaces)")
+add_req.add_argument("priority", type=int,
+                     help="ranked priority of observation 1-5 for survey priorities; 9 for immediate ToO")
+add_req.add_argument("--filter", type=str, choices=["Open", "g", "r", "i", "z", "y"],
+                     help="STACam bandpass filter")
+add_req.add_argument("--exp_num", type=int, help="number of exposures per observation")
+add_req.add_argument("--comments", type=str, help="general comments")
+# load_reqs subparser
+load_reqs = command_subparsers.add_parser("load_reqs", help="load observation requests from file",
+                                          description="Load multiple observation requests from CSV file. "
+                                                      "Display returned request indexes.")
+load_reqs.add_argument("request_file", type=str,
+                       help="CSV file where each line details a request, column names must match params from add_req.")
+# del_req subparser
+del_req = command_subparsers.add_parser("del_req", help="delete one or more observation requests from queue",
+                                        description="Remove one or more observation requests from robotic queue.")
+del_req.add_argument("user", type=str, help="name of the user who submitted obs requests")
+del_req.add_argument("--obj_name", type=str, help="name of object to remove requests for")
+del_req.add_argument("--req_idx", type=int, help="index of individual obs request to remove")
+# get_reqs subparser
+get_reqs = command_subparsers.add_parser("get_reqs", help="show all observation requests for a given user",
+                                         description="Retrieve a dataframe of all observation "
+                                                     "requests for a given user.")
+get_reqs.add_argument("user", type=str, help="name of user associated with requests")
+get_reqs.add_argument("--output", type=str, help="if set, then write dataframe to given csv file.")
+
+args = main_parser.parse_args()
+
+# Read in observer config file
+config = "/data/projects/UH88/code/aux/"
+
+schedule = SchedulerRequests(reporting_mode=LOGFILE,
+                             config_dir=config,
+                             debug=args['debug'])
+
+# Run main program logic
+if args["command"] == "get_obs":
+    filenames = schedule.get_recent_observation(args["user"], args["n_nights"], args["obj_name"])
+    print("OBSERVATION FITS FILE PATHS:")
+    for file in filenames:
+        print(file)
+    print(f"TOTAL OBSERVATIONS: {len(filenames)}")
+elif args["command"] == "add_req":
+    req_idx = schedule.add_request(obj_name=args["obj_name"],
+                                   ra_hms=args["ra_hms"],
+                                   dec_dms=args["dec_dms"],
+                                   user=args["user"],
+                                   priority=args["priority"],
+                                   filter_name=args["filter"],
+                                   exp_num=args["exp_num"],
+                                   comments=args["comments"])
+    print(f"SUBMITTED, REQUEST INDEX: {req_idx}")
+elif args["command"] == "load_reqs":
+    # Read in file
+    df = pd.read_csv(args["request_file"])
+    req_idxs = []
+    print(f"SUBMITTING FILE: {args['request_file']}")
+    for _, row in df.iterrows():
+        row_dict = row.to_dict()
+        # Submit rows
+        req_idx = schedule.add_request(**row)
+        print(req_idx)
+elif args["command"] == "del_req":
+    n_rows_del = schedule.remove_request(args["user"], args["obj_name"], args["request_idx"])
+    print(f"SUCCESSFULLY DELETED {n_rows_del} REQUESTS")
+elif args["command"] == "get_reqs":
+    req_df = schedule.get_requests(args.user)
+    if args["output"]:
+        req_df.to_csv(args["output"], index=False)
+    else:
+        print(req_df)
+else:
+    raise ValueError("Invalid Command")
