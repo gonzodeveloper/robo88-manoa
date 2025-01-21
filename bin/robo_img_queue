@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/share/anaconda/base/envs/python3_generic/bin/python3
 #######################################################################################################################
 # IMG PULL QUEUE SCRIPT
 # Runs a pull queue for new images taken by the Robo88 Observer system.
@@ -88,7 +88,7 @@ try:
             # Get image meta
             img = json.loads(msg.value().decode('utf-8'))
             # Remove root dir (/obs/data/) and pull
-            dest = os.path.join(data_dir, img["img_path"][10:])
+            dest = os.path.join(data_dir, os.path.dirname(img["img_path"])[10:])
             # Create if necessary
             if not os.path.exists(dest):
                 os.makedirs(dest, exist_ok=True)
