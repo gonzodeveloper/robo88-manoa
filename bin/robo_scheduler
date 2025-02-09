@@ -76,7 +76,7 @@ del_req = command_subparsers.add_parser("del_req", help="delete one or more obse
                                         description="Remove one or more observation requests from robotic queue.")
 del_req.add_argument("username", type=str, help="name of the user who submitted obs requests")
 del_req.add_argument("--obj_name", type=str, help="name of object to remove requests for")
-del_req.add_argument("--req_idx", type=int, help="index of individual obs request to remove")
+del_req.add_argument("--req_idx", "--request_idx", type=int, help="index of individual obs request to remove")
 # get_reqs subparser
 get_reqs = command_subparsers.add_parser("get_reqs", help="show all observation requests for a given user",
                                          description="Retrieve a dataframe of all observation "
