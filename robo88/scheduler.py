@@ -76,6 +76,9 @@ class SchedulerRequests:
                 +-------------------+--------------+------+-----+---------+----------------+
         :return: request index of target inserted.
         """
+        # Remove just in case
+        request['ra_hms'] = request['ra_hms'].replace("ra=", "")
+        request['dec_dms'] = request['dec_dms'].replace("dec=", "")
         # Send request to change night (don't send nulls in JSON)
         status, msg = self._send_request(f"add_req {json.dumps(request)}")
 

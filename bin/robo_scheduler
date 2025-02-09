@@ -17,12 +17,6 @@ main_parser.add_argument('--debug', action='store_true', default=False,
                          help='set to enable printing/logging in debug mode')
 command_subparsers = main_parser.add_subparsers(title="command", dest="command")
 
-# get_obs subparser
-get_obs = command_subparsers.add_parser("get_obs", help="get files robo observations",
-                                        description="Retrieve file names for user's recent observations.")
-get_obs.add_argument("username", type=str, help="name of the user who submitted obs requests")
-get_obs.add_argument("--n_nights", type=int, help="how many nights back to search")
-get_obs.add_argument("--obj_name", type=str, help="name of object to search")
 # add_req subparser
 add_req = command_subparsers.add_parser("add_req", help="submit single observation request",
                                         description="Submit single observation request to robotic observer.")
@@ -71,19 +65,31 @@ load_reqs = command_subparsers.add_parser("load_reqs", help="load observation re
                                                       "Display returned request indexes.")
 load_reqs.add_argument("request_file", type=str,
                        help="CSV file where each line details a request, column names must match params from add_req.")
-# del_req subparser
-del_req = command_subparsers.add_parser("del_req", help="delete one or more observation requests from queue",
-                                        description="Remove one or more observation requests from robotic queue.")
-del_req.add_argument("username", type=str, help="name of the user who submitted obs requests")
-del_req.add_argument("--obj_name", type=str, help="name of object to remove requests for")
-del_req.add_argument("--req_idx", "--request_idx", type=int, help="index of individual obs request to remove")
 # get_reqs subparser
 get_reqs = command_subparsers.add_parser("get_reqs", help="show all observation requests for a given user",
                                          description="Retrieve a dataframe of all observation "
                                                      "requests for a given user.")
 get_reqs.add_argument("username", type=str, help="name of user associated with requests")
 get_reqs.add_argument("--format", type=str, default="summary", help="output format, choices 'summary' 'csv'")
+
+
+# del_req subparser
+del_req = command_subparsers.add_parser("del_req", help="delete one or more observation requests from queue",
+                                        description="Remove one or more observation requests from robotic queue.")
+del_req.add_argument("username", type=str, help="name of the user who submitted obs requests")
+del_req.add_argument("--obj_name", type=str, help="name of object to remove requests for")
+del_req.add_argument("--req_idx", "--request_idx", type=int, help="index of individual obs request to remove")
+
+# get_obs subparser
+get_obs = command_subparsers.add_parser("get_obs", help="get directory information for recent observations",
+                                        description="Retrieve directory names for user's recent observations.")
+get_obs.add_argument("username", type=str, help="name of the user who submitted obs requests")
+get_obs.add_argument("--n_nights", type=int, help="how many nights back to search")
+get_obs.add_argument("--obj_name", type=str, help="name of object to search")
+
 request_args = vars(main_parser.parse_args())
+
+
 ################################################################################################################
 # Main process
 ################################################################################################################
@@ -104,6 +110,8 @@ if command == "get_obs":
         print(file)
     print(f"TOTAL OBSERVATIONS: {len(filenames)}")
 elif command == "add_req":
+    request_args['ra_hms'] = request_args['ra_hms'].replace("ra=", "")
+    request_args['dec_dms'] = request_args['dec_dms'].replace("dec=", "")
     req_idx = schedule.add_request(request_args)
     print(f"SUBMITTED, REQUEST INDEX: {req_idx}")
 elif command == "load_reqs":
@@ -114,14 +122,16 @@ elif command == "load_reqs":
     for _, row in df.iterrows():
         row_dict = row.to_dict()
         # Submit rows
-        req_idx = schedule.add_request(**row)
+        req_idx = schedule.add_request(row)
         print(req_idx)
 elif command == "del_req":
     n_rows_del = schedule.remove_request(request_args["username"], request_args["obj_name"], request_args["req_idx"])
     print(f"SUCCESSFULLY DELETED {n_rows_del} REQUESTS")
 elif command == "get_reqs":
     req_df = schedule.get_requests(request_args["username"])
-    if request_args['format'] == 'summary':
+    if len(req_df) == 0:
+        print(f"NO OBSERVATION REQUESTS FOR {request_args['username']}")
+    elif request_args['format'] == 'summary':
         print(req_df)
     elif request_args['format'] == 'csv':
         print(req_df.to_csv(index=False))
