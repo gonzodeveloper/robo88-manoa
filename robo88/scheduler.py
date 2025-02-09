@@ -103,7 +103,6 @@ class SchedulerRequests:
             raise RuntimeError(msg)
 
         msg_dict = json.loads(json.loads(msg))
-        print(type(msg_dict))
         # Read dataframe from JSON
         return pd.json_normalize(msg_dict)
 
