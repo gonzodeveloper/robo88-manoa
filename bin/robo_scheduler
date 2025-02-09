@@ -122,7 +122,7 @@ elif command == "load_reqs":
     for _, row in df.iterrows():
         row_dict = row.to_dict()
         # Submit rows
-        req_idx = schedule.add_request(row)
+        req_idx = schedule.add_request(row_dict)
         print(req_idx)
 elif command == "del_req":
     n_rows_del = schedule.remove_request(request_args["username"], request_args["obj_name"], request_args["req_idx"])
