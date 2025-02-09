@@ -117,7 +117,7 @@ elif command == "load_reqs":
         req_idx = schedule.add_request(**row)
         print(req_idx)
 elif command == "del_req":
-    n_rows_del = schedule.remove_request(request_args["username"], request_args["obj_name"], request_args["request_idx"])
+    n_rows_del = schedule.remove_request(request_args["username"], request_args["obj_name"], request_args["req_idx"])
     print(f"SUCCESSFULLY DELETED {n_rows_del} REQUESTS")
 elif command == "get_reqs":
     req_df = schedule.get_requests(request_args["username"])
