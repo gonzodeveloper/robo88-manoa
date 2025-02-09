@@ -83,55 +83,47 @@ get_reqs = command_subparsers.add_parser("get_reqs", help="show all observation 
                                                      "requests for a given user.")
 get_reqs.add_argument("username", type=str, help="name of user associated with requests")
 get_reqs.add_argument("--format", type=str, default="summary", help="output format, choices 'summary' 'csv'")
-args = vars(main_parser.parse_args())
+request_args = vars(main_parser.parse_args())
 ################################################################################################################
 # Main process
 ################################################################################################################
 # Read in observer config file
-config = "/data/projects/UH88/robo88-manoa/aux/"
-schedule = SchedulerRequests(config_dir=config,
-                             debug=args['debug'])
+config = "/data/projects/UH88/robo88-manoa/aux/scheduler_requests.conf"
+schedule = SchedulerRequests(config_file=config,
+                             debug=request_args['debug'])
 
 # Run command logic and submit commands
-command = args['command']
-del args['command']
-del args['debug']
+command = request_args['command']
+del request_args['command']
+del request_args['debug']
 
 if command == "get_obs":
-    filenames = schedule.get_recent_observation(args["username"], args["n_nights"], args["obj_name"])
+    filenames = schedule.get_recent_observation(request_args["username"], request_args["n_nights"], request_args["obj_name"])
     print("OBSERVATION FITS FILE PATHS:")
     for file in filenames:
         print(file)
     print(f"TOTAL OBSERVATIONS: {len(filenames)}")
-elif args["command"] == "add_req":
-    req_idx = schedule.add_request(obj_name=args["obj_name"],
-                                   ra_hms=args["ra_hms"],
-                                   dec_dms=args["dec_dms"],
-                                   user=args["username"],
-                                   priority=args["priority"],
-                                   filters=args["filters"],
-                                   exp_times=args['exp_time'],
-                                   exp_num=args["exp_num"],
-                                   comments=args["comments"])
+elif command == "add_req":
+    req_idx = schedule.add_request(request_args)
     print(f"SUBMITTED, REQUEST INDEX: {req_idx}")
 elif command == "load_reqs":
     # Read in file
-    df = pd.read_csv(args["request_file"])
+    df = pd.read_csv(request_args["request_file"])
     req_idxs = []
-    print(f"SUBMITTING FILE: {args['request_file']}")
+    print(f"SUBMITTING FILE: {request_args['request_file']}")
     for _, row in df.iterrows():
         row_dict = row.to_dict()
         # Submit rows
         req_idx = schedule.add_request(**row)
         print(req_idx)
 elif command == "del_req":
-    n_rows_del = schedule.remove_request(args["username"], args["obj_name"], args["request_idx"])
+    n_rows_del = schedule.remove_request(request_args["username"], request_args["obj_name"], request_args["request_idx"])
     print(f"SUCCESSFULLY DELETED {n_rows_del} REQUESTS")
 elif command == "get_reqs":
-    req_df = schedule.get_requests(args["username"])
-    if args['format'] == 'summary':
+    req_df = schedule.get_requests(request_args["username"])
+    if request_args['format'] == 'summary':
         print(req_df)
-    elif args['format'] == 'csv':
+    elif request_args['format'] == 'csv':
         print(req_df.to_csv(index=False))
 else:
     raise ValueError("Invalid Command")
