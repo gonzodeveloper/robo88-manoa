@@ -21,6 +21,7 @@ command_subparsers = main_parser.add_subparsers(title="command", dest="command")
 add_req = command_subparsers.add_parser("add_req", help="submit single observation request",
                                         description="Submit single observation request to robotic observer.")
 add_req.add_argument("obj_name", type=str, help="standard object name")
+add_req.add_argument("instrument", type=str, help="instrument to observe on")
 add_req.add_argument("ra_hms", type=str, help="right ascension (must start with ra=; \"ra=HH:MM:SS.S\"")
 add_req.add_argument("dec_dms", type=str, help="declination (must start with dec=); dec=\"DD:MM:SS.S\"")
 add_req.add_argument("username", type=str, help="name of requesting user (no spaces)")
