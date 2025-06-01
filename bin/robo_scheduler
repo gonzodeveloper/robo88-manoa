@@ -121,7 +121,7 @@ elif command == "load_reqs":
     req_idxs = []
     print(f"SUBMITTING FILE: {request_args['request_file']}")
     for _, row in df.iterrows():
-        row_dict = row.to_dict
+        row_dict = row.to_dict()
         # Submit rows
         req_idx = schedule.add_request(row_dict)
         print(req_idx)
