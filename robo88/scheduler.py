@@ -46,34 +46,36 @@ class SchedulerRequests:
         """
         Load single observation into request database
         :param request: observation request dictionary, field definitions below:
-                +-------------------+--------------+------+-----+---------+----------------+
-                | Field             | Type         | Null | Key | Default | Extra          |
-                +-------------------+--------------+------+-----+---------+----------------+
-                | ra_hms            | varchar(16)  | NO   |     | NULL    |                |
-                | dec_dms           | varchar(16)  | NO   |     | NULL    |                |
-                | obj_name          | varchar(32)  | NO   |     | NULL    |                |
-                | username          | varchar(32)  | NO   |     | NULL    |                |
-                | priority          | int(11)      | NO   |     | NULL    |                |
-                | window_start      | datetime     | NO   |     | NULL    |                |
-                | window_finish     | datetime     | NO   |     | NULL    |                |
-                | binning_mode      | varchar(16)  | NO   |     | NULL    |                |
-                | filters           | varchar(32)  | NO   |     | NULL    |                |
-                | exp_times         | varchar(32)  | NO   |     | NULL    |                |
-                | exp_num           | int(11)      | NO   |     | NULL    |                |
-                | dither            | varchar(32)  | NO   |     | NULL    |                |
-                | stack             | varchar(32)  | NO   |     | NULL    |                |
-                | cadence           | varchar(32)  | NO   |     | NULL    |                |
-                | ns_ref_time       | varchar(32)  | YES  |     | NULL    |                |
-                | ns_rate_ra        | float        | YES  |     | NULL    |                |
-                | ns_rate_dec       | float        | YES  |     | NULL    |                |
-                | max_airmass       | float        | YES  |     | NULL    |                |
-                | min_moon_sep      | float        | YES  |     | NULL    |                |
-                | follow_on_id      | int(11)      | YES  |     | NULL    |                |
-                | follow_on_lag_min | int(11)      | YES  |     | NULL    |                |
-                | follow_on_lag_max | int(11)      | YES  |     | NULL    |                |
-                | too               | varchar(16)  | YES  |     | NULL    |                |
-                | comments          | varchar(256) | YES  |     | NULL    |                |
-                +-------------------+--------------+------+-----+---------+----------------+
+        +-------------------+--------------+------+-----+---------+----------------+
+        | Field             | Type         | Null | Key | Default | Extra          |
+        +-------------------+--------------+------+-----+---------+----------------+
+        | request_idx       | int(11)      | NO   | PRI | NULL    | auto_increment |
+        | obj_name          | varchar(32)  | NO   |     | NULL    |                |
+        | instrument        | varchar(16)  | NO   |     | NULL    |                |
+        | ra_hms            | varchar(32)  | NO   |     | NULL    |                |
+        | dec_dms           | varchar(32)  | NO   |     | NULL    |                |
+        | username          | varchar(32)  | NO   |     | NULL    |                |
+        | priority          | int(11)      | NO   |     | NULL    |                |
+        | window_start      | datetime     | NO   |     | NULL    |                |
+        | window_finish     | datetime     | NO   |     | NULL    |                |
+        | binning_mode      | varchar(32)  | NO   |     | NULL    |                |
+        | filters           | varchar(32)  | NO   |     | NULL    |                |
+        | exp_times         | varchar(32)  | NO   |     | NULL    |                |
+        | exp_num           | int(11)      | NO   |     | NULL    |                |
+        | dither            | varchar(32)  | NO   |     | NULL    |                |
+        | stack             | varchar(32)  | NO   |     | NULL    |                |
+        | cadence           | varchar(32)  | NO   |     | NULL    |                |
+        | ns_ref_time       | datetime     | YES  |     | NULL    |                |
+        | ns_rate_ra        | float        | YES  |     | NULL    |                |
+        | ns_rate_dec       | float        | YES  |     | NULL    |                |
+        | max_airmass       | float        | YES  |     | NULL    |                |
+        | min_moon_sep      | float        | YES  |     | NULL    |                |
+        | follow_on_id      | int(11)      | YES  |     | NULL    |                |
+        | follow_on_lag_min | int(11)      | YES  |     | NULL    |                |
+        | follow_on_lag_max | int(11)      | YES  |     | NULL    |                |
+        | too               | varchar(16)  | YES  |     | NULL    |                |
+        | comments          | varchar(256) | YES  |     | NULL    |                |
+        +-------------------+--------------+------+-----+---------+----------------+
         :return: request index of target inserted.
         """
         # Remove just in case
