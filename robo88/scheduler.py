@@ -70,7 +70,7 @@ class SchedulerRequests:
         | ns_rate_dec       | float        | YES  |     | NULL    |                |
         | max_airmass       | float        | YES  |     | NULL    |                |
         | min_moon_sep      | float        | YES  |     | NULL    |                |
-        | follow_on_id      | int(11)      | YES  |     | NULL    |                |
+        | n_follow_on       | int(11)      | YES  |     | NULL    |                |
         | follow_on_lag_min | int(11)      | YES  |     | NULL    |                |
         | follow_on_lag_max | int(11)      | YES  |     | NULL    |                |
         | too               | varchar(16)  | YES  |     | NULL    |                |

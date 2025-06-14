@@ -48,9 +48,9 @@ add_req.add_argument("--ns_ref_time", type=str,
                      help="coordinate reference time for moving targets; UTC ISO format")
 add_req.add_argument("--ns_rate_ra", type=float, help="motion of target in ra (mas/sec)")
 add_req.add_argument("--ns_rate_dec", type=float, help="motion of target in dec (mas/sec)")
-add_req.add_argument("--max_airmass", type=float, help="maximum airmass allowed for observation")
+add_req.add_argument("--max_airmass", type=float, schedulep="maximum airmass allowed for observation")
 add_req.add_argument("--min_moon_sep", type=float, help="minimum moon separation for observation (degrees)")
-add_req.add_argument("--follow_on_id", type=int, help="request_idx of observation for follow-on")
+add_req.add_argument("--n_follow_on", type=int, help="number of lagged follow-on observations needed")
 add_req.add_argument("--follow_on_lag_min", type=int,
                      help="minimum lag between first observation and follow-on; seconds")
 add_req.add_argument("--follow_on_lag_max", type=int,
