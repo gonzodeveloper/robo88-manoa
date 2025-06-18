@@ -65,11 +65,11 @@ class SchedulerRequests:
         | dither            | varchar(32)  | NO   |     | NULL    |                |
         | stack             | varchar(32)  | NO   |     | NULL    |                |
         | cadence           | varchar(32)  | NO   |     | NULL    |                |
+        | max_airmass       | float        | NO   |     | NULL    |                |
+        | min_moon_sep      | float        | NO   |     | NULL    |                |
         | ns_ref_time       | datetime     | YES  |     | NULL    |                |
         | ns_rate_ra        | float        | YES  |     | NULL    |                |
         | ns_rate_dec       | float        | YES  |     | NULL    |                |
-        | max_airmass       | float        | YES  |     | NULL    |                |
-        | min_moon_sep      | float        | YES  |     | NULL    |                |
         | n_follow_on       | int(11)      | YES  |     | NULL    |                |
         | follow_on_lag_min | int(11)      | YES  |     | NULL    |                |
         | follow_on_lag_max | int(11)      | YES  |     | NULL    |                |
