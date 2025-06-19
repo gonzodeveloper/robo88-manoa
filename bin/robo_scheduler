@@ -139,4 +139,5 @@ elif command == "get_reqs":
 else:
     raise ValueError("Invalid Command")
 
+print("closing")
 schedule.close()
