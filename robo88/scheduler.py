@@ -173,6 +173,7 @@ class SchedulerRequests:
         return status, response
 
     def close(self):
+        self._send_request("close")
         self.sock.close()
 
 
