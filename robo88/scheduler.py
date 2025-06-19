@@ -149,6 +149,12 @@ class SchedulerRequests:
         # Return number of lines removed
         return msg
 
+    def do_close(self):
+        self.logger.debug({"status": "closing connection"})
+        self._send_request("close")
+        self.sock.close()
+        return None
+
     def _send_request(self, request):
         # Send bytes
         send_msg(sock=self.sock, msg=bytes(request, "ascii"))
@@ -171,11 +177,6 @@ class SchedulerRequests:
         self.logger.debug({'status': 'recieved_response', 'request': message})
 
         return status, response
-
-    def close(self):
-        self.logger.debug({"status": "closing connection"})
-        self._send_request("close")
-        self.sock.close()
 
 
 ########################################################################

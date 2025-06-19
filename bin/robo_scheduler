@@ -140,4 +140,5 @@ else:
     raise ValueError("Invalid Command")
 
 # CLOSE CONNECTION 
-schedule.close()
+schedule.do_close()
+
