@@ -23,7 +23,7 @@ class SchedulerRequests:
         self.sock.connect((host, port))
 
         # Times out after 1 hours
-        self.sock.settimeout(3600)
+        #self.sock.settimeout(3600)
 
         # Get logger
         self.logger = logging.getLogger("robo_scheduler")
